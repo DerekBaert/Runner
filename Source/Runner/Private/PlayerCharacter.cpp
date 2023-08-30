@@ -15,6 +15,9 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	Capsule = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
+	Capsule->SetSimulatePhysics(true);
+	RootComponent = Capsule;
 	
 }
 
@@ -22,7 +25,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	const FVector Force{ Speed, 0.0f, 0.0f };
+	Capsule->AddForce(Force, NAME_None, true);
 
 }
 
