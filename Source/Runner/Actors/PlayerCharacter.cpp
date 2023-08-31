@@ -4,6 +4,8 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/ArrowComponent.h"
+
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -14,6 +16,9 @@ APlayerCharacter::APlayerCharacter()
 	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
 	Cube->SetSimulatePhysics(true);
 	RootComponent = Cube;
+
+	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	Arrow->SetupAttachment(Cube);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(Cube);

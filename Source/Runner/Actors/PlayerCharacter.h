@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-//#include "InputActionValue.h"
+#include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
 // Forward Declarations:
@@ -12,6 +12,7 @@ class UInputMappingContext;
 class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
+class UArrowComponent;
 class ARunnerGameMode;
 
 UCLASS()
@@ -44,6 +45,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UStaticMeshComponent* Cube;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
+	UArrowComponent* Arrow;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float Speed = 1000.0f;
