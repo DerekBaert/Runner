@@ -2,12 +2,17 @@
 
 
 #include "PlayerCharacter.h"
+
+#include <string>
+
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Logging/StructuredLog.h"
 #include "Components/ArrowComponent.h"
+#include "KeyPickup.h"
 
 using UEILPS = UEnhancedInputLocalPlayerSubsystem;
 using UEIC = UEnhancedInputComponent;
@@ -57,6 +62,13 @@ void APlayerCharacter::BeginPlay()
 			}
 		}
 	}
+	TArray<AActor*> Keys;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AKeyPickup::StaticClass(), Keys);
+	for (int i = 0; i < Keys.Num(); i++)
+	{
+		Cast<AKeyPickup>(Keys[i])->PickedUp.BindUObject(this, &APlayerCharacter::IncrementKeyCount);
+		//AddDynamic();
+	}
 }
 
 // Called to bind functionality to input
@@ -74,6 +86,13 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			UE_LOGFMT(LogTemp, Log, "DEBUG: Player Input Failed to Set up");
 		}
 	}
+}
+
+void APlayerCharacter::IncrementKeyCount()
+{
+	FString message = "KeyCount: " + FString::SanitizeFloat(KeyCount); 
+	KeyCount++;
+	UE_LOGFMT(LogTemp, Log, FString::SanitizeFloat(KeyCount));
 }
 
 void APlayerCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)

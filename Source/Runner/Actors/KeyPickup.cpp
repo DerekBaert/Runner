@@ -25,7 +25,7 @@ void AKeyPickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		PickedUp.Broadcast();
+		PickedUp.Broadcast(true);
 		Destroy();
 	}
 }

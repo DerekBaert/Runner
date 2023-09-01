@@ -44,6 +44,8 @@ protected:
 
 	void TurnRightLeft(const FInputActionValue& Value);
 
+	void IncrementKeyCount();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -65,4 +67,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	float KeyCount;
 };
