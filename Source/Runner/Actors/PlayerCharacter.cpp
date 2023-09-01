@@ -67,8 +67,6 @@ void APlayerCharacter::BeginPlay()
 	for (int i = 0; i < Keys.Num(); i++)
 	{
 		Cast<AKeyPickup>(Keys[i])->PickedUp.AddUObject(this, &APlayerCharacter::IncrementKeyCount);
-		//.BindUObject(this, &APlayerCharacter::IncrementKeyCount);
-		//AddDynamic();
 	}
 }
 
