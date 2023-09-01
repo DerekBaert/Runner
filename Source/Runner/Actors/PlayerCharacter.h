@@ -15,6 +15,8 @@ class UCameraComponent;
 class UArrowComponent;
 class ARunnerGameMode;
 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKeyCountUpdated, int32, KeyCount);
+
 UCLASS()
 class RUNNER_API APlayerCharacter : public APawn
 {
@@ -23,6 +25,8 @@ class RUNNER_API APlayerCharacter : public APawn
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
+
+	FKeyCountUpdated KeyCountUpdated;
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,6 +50,9 @@ protected:
 
 	void IncrementKeyCount();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	int32 KeyCount;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -67,7 +74,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UCameraComponent* Camera;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
-	float KeyCount;
 };
