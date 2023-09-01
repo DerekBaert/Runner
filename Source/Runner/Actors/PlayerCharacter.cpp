@@ -66,7 +66,8 @@ void APlayerCharacter::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AKeyPickup::StaticClass(), Keys);
 	for (int i = 0; i < Keys.Num(); i++)
 	{
-		Cast<AKeyPickup>(Keys[i])->PickedUp.BindUObject(this, &APlayerCharacter::IncrementKeyCount);
+		Cast<AKeyPickup>(Keys[i])->PickedUp.AddUObject(this, &APlayerCharacter::IncrementKeyCount);
+		//.BindUObject(this, &APlayerCharacter::IncrementKeyCount);
 		//AddDynamic();
 	}
 }
@@ -90,9 +91,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::IncrementKeyCount()
 {
-	FString message = "KeyCount: " + FString::SanitizeFloat(KeyCount); 
 	KeyCount++;
-	UE_LOGFMT(LogTemp, Log, FString::SanitizeFloat(KeyCount));
+	UE_LOG(LogTemp, Log, TEXT("KeyCount: %f"), KeyCount);
+
 }
 
 void APlayerCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)

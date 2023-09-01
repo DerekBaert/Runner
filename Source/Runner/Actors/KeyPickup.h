@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "KeyPickup.generated.h"
 
-DECLARE_DELEGATE(FOnPickUpSignature);
+DECLARE_MULTICAST_DELEGATE(FOnPickUpSignature);
+//MuliDELEGATE(FOnPickUpSignature);
 
 UCLASS()
 class RUNNER_API AKeyPickup : public AActor
