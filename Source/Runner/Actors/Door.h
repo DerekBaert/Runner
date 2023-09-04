@@ -18,8 +18,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	int32 KeysNeeded;
 
-	void ADoor::OpenDoor();
+	UFUNCTION()
+	void OpenDoor(int32 KeyCount);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

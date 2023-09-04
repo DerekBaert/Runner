@@ -91,7 +91,7 @@ void APlayerCharacter::IncrementKeyCount()
 {
 	KeyCount++;
 	UE_LOG(LogTemp, Log, TEXT("KeyCount: %d"), KeyCount);
-	KeyCountUpdated.Execute(KeyCount);
+	KeyCountUpdated.Broadcast(KeyCount);
 }
 
 void APlayerCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)

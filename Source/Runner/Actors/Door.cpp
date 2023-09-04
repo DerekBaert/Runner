@@ -14,7 +14,8 @@ ADoor::ADoor()
 
 	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
 	Cube->SetSimulatePhysics(true);
-	RootComponent = Cube;
+	//RootComponent = Cube;
+	Cube->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -24,12 +25,16 @@ void ADoor::BeginPlay()
 	AActor* Player = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass());
 
 	// This is throwing errors
-	Cast<APlayerCharacter>(Player)->KeyCountUpdated.BindUFunction(this, "OpenDoor");
+	Cast<APlayerCharacter>(Player)->KeyCountUpdated.AddDynamic(this, &ADoor::OpenDoor);
+
 }
 
-void ADoor::OpenDoor()
+void ADoor::OpenDoor(int32 KeyCount)
 {
-	Destroy();
+	if (KeyCount >= KeysNeeded)
+	{
+		Destroy();
+	}
 }
 
 // Called every frame
