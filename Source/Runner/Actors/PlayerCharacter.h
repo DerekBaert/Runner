@@ -47,7 +47,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* MoveAction;
 
-	void TurnRightLeft(const FInputActionValue& Value);
+	void RotateRightLeft(const FInputActionValue& Value);
+
+	void InputFinished();
 
 	void IncrementKeyCount();
 
@@ -69,6 +71,12 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float Speed = 1000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float NormalSpeed = 1000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float TurnSpeed = 500.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	USpringArmComponent* SpringArm;

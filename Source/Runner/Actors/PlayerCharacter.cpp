@@ -80,7 +80,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		if (MoveAction) 
 		{
-			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TurnRightLeft);
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateRightLeft);
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
 		}
 		else 
 		{
@@ -104,19 +105,20 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 }
 
-void APlayerCharacter::TurnRightLeft(const FInputActionValue& Value)
+void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 {
+	// Reduce speed 
+	Speed = TurnSpeed;
+
 	// Rotate character to face new direction
-
-	// Placeholder to test inputs
 	const float MovementAxis = Value.Get<float>();
-
-
-	const FVector CubeForce{ 0.0f, MovementAxis * 1000, 0.0f };
-	//Cube->AddForce(CubeForce, NAME_None, true);
-
 	Cube->AddLocalRotation(FRotator(0, MovementAxis, 0));
 
+}
+
+void APlayerCharacter::InputFinished()
+{
+	Speed = NormalSpeed;
 }
 
 // Called every frame
