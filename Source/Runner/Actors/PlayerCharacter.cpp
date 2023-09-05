@@ -35,6 +35,8 @@ APlayerCharacter::APlayerCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -109,8 +111,12 @@ void APlayerCharacter::TurnRightLeft(const FInputActionValue& Value)
 	// Placeholder to test inputs
 	const float MovementAxis = Value.Get<float>();
 
+
 	const FVector CubeForce{ 0.0f, MovementAxis * 1000, 0.0f };
-	Cube->AddForce(CubeForce, NAME_None, true);
+	//Cube->AddForce(CubeForce, NAME_None, true);
+
+	Cube->AddLocalRotation(FRotator(0, MovementAxis, 0));
+
 }
 
 // Called every frame
@@ -118,7 +124,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	const FVector Force{ Speed, 0.0f, 0.0f };
+	const FVector Force = Cube->GetForwardVector() * Speed;
 	Cube->AddForce(Force, NAME_None, true);
+	
 }
 
