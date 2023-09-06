@@ -12,10 +12,10 @@ ADoor::ADoor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
-	Cube->SetSimulatePhysics(true);
-	//RootComponent = Cube;
-	Cube->SetupAttachment(RootComponent);
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetSimulatePhysics(true);
+	//RootComponent = Mesh;
+	Mesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

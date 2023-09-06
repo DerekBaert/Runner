@@ -23,15 +23,15 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Cube = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube"));
-	Cube->SetSimulatePhysics(true);
-	RootComponent = Cube;
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetSimulatePhysics(true);
+	RootComponent = Mesh;
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
-	Arrow->SetupAttachment(Cube);
+	Arrow->SetupAttachment(Mesh);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArm->SetupAttachment(Cube);
+	SpringArm->SetupAttachment(Mesh);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
@@ -44,10 +44,10 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (Cube)
+	if (Mesh)
 	{
-		Cube->OnComponentHit.AddDynamic(this, &APlayerCharacter::OnHit);
-		Cube->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
+		Mesh->OnComponentHit.AddDynamic(this, &APlayerCharacter::OnHit);
+		Mesh->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
 	}		
 
 	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController())) 
@@ -112,7 +112,7 @@ void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 
 	// Rotate character to face new direction
 	const float MovementAxis = Value.Get<float>();
-	Cube->AddLocalRotation(FRotator(0, MovementAxis, 0));
+	Mesh->AddLocalRotation(FRotator(0, MovementAxis, 0));
 
 }
 
@@ -126,8 +126,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	const FVector Force = Cube->GetForwardVector() * Speed;
-	Cube->AddForce(Force, NAME_None, true);
+	const FVector Force = Mesh->GetForwardVector() * Speed;
+	Mesh->AddForce(Force, NAME_None, true);
 	
 }
 

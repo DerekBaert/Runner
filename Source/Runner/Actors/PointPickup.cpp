@@ -1,42 +1,42 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KeyPickup.h"
+#include "PointPickup.h"
 #include "Logging/StructuredLog.h"
 #include "PlayerCharacter.h"
 
+
 // Sets default values
-AKeyPickup::AKeyPickup()
+APointPickup::APointPickup()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
-
 }
 
 // Called when the game starts or when spawned
-void AKeyPickup::BeginPlay()
+void APointPickup::BeginPlay()
 {
 	Super::BeginPlay();
-	if(Mesh)
-	{
-		Mesh->OnComponentBeginOverlap.AddDynamic(this, &AKeyPickup::OnBeginOverlap);
-	}
+	
 }
 
-void AKeyPickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void APointPickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOGFMT(LogTemp, Log, "DEBUG: Overlap Triggered");
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		PickedUp.Broadcast();
+		PickedUp.Broadcast(PointValue);
 		Destroy();
 	}
 }
 
 // Called every frame
-void AKeyPickup::Tick(float DeltaTime)
+void APointPickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
