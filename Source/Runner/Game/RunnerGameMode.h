@@ -13,5 +13,15 @@ UCLASS()
 class RUNNER_API ARunnerGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+protected:
+
+	void BeginPlay();
+
+	void TimerFunction();
+	FTimerHandle TimerHandle;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	int32 levelTimer = 5;
 	
 };
