@@ -53,8 +53,14 @@ protected:
 
 	void IncrementKeyCount();
 
+	UFUNCTION()
+	void AddPoints(int32 scoreDelta);
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	int32 KeyCount = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	int32 Score = 0;
 
 public:	
 	// Called every frame

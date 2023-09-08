@@ -13,6 +13,7 @@
 #include "Logging/StructuredLog.h"
 #include "Components/ArrowComponent.h"
 #include "KeyPickup.h"
+#include "PointPickup.h"
 
 using UEILPS = UEnhancedInputLocalPlayerSubsystem;
 using UEIC = UEnhancedInputComponent;
@@ -70,6 +71,13 @@ void APlayerCharacter::BeginPlay()
 	{
 		Cast<AKeyPickup>(Keys[i])->PickedUp.AddUObject(this, &APlayerCharacter::IncrementKeyCount);
 	}
+
+	TArray<AActor*> Points;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APointPickup::StaticClass(), Points);
+	for (int i = 0; i < Points.Num(); i++)
+	{
+		Cast<APointPickup>(Points[i])->PickedUp.AddDynamic(this, &APlayerCharacter::AddPoints);
+	}
 }
 
 // Called to bind functionality to input
@@ -90,11 +98,18 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+// Increments key count by 1 when key broadcasts that it has been picked up
 void APlayerCharacter::IncrementKeyCount()
 {
 	KeyCount++;
 	UE_LOG(LogTemp, Log, TEXT("KeyCount: %d"), KeyCount);
 	KeyCountUpdated.Broadcast(KeyCount);
+}
+
+// Adds points from broadcasting point pickup
+void APlayerCharacter::AddPoints(int32 PointValue)
+{
+	Score += PointValue;
 }
 
 void APlayerCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)

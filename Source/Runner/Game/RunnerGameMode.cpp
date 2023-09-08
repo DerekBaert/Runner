@@ -22,6 +22,5 @@ void ARunnerGameMode::TimerFunction()
 		// Add game over later
 		UE_LOG(LogTemp, Log, TEXT("Timer finished"));
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-	}	
-	
+	}
 }
