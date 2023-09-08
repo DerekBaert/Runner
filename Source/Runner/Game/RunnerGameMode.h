@@ -18,10 +18,11 @@ protected:
 	void BeginPlay();
 
 	void TimerFunction();
+	
 	FTimerHandle TimerHandle;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	int32 levelTimer = 5;
-	
+	void LevelComplete();
 };

@@ -24,3 +24,8 @@ void ARunnerGameMode::TimerFunction()
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
 }
+
+void ARunnerGameMode::LevelComplete()
+{
+	UE_LOG(LogTemp, Log, TEXT("Level Complete"));
+}
