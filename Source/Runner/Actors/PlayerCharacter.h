@@ -15,6 +15,19 @@ class UCameraComponent;
 class UArrowComponent;
 class ARunnerGameMode;
 
+/*
+ * To do:
+	Construct maze
+	Test player drifting 
+	Particles for player drifting
+	Add remaining time to score
+	Pause and End screens
+	Particles for pickups?
+ *
+ */
+
+
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKeyCountUpdated, int32, KeyCount);
 
 UCLASS()
