@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "RunnerGameMode.generated.h"
 
+
 /**
  * 
  */
@@ -21,8 +22,12 @@ protected:
 	
 	FTimerHandle TimerHandle;
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Widgets)
+	//UPlayerHUD* PlayerWidget;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	int32 levelTimer = 5;
 	void LevelComplete();
+	void PauseGame(bool PauseGame);
 };

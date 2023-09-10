@@ -2,9 +2,7 @@
 
 
 #include "PlayerCharacter.h"
-
-#include <string>
-
+#include "../Game/RunnerGameMode.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
@@ -44,6 +42,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	GameMode = Cast<ARunnerGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	if (Mesh)
 	{
@@ -95,6 +94,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		{
 			UE_LOGFMT(LogTemp, Log, "DEBUG: Player Input Failed to Set up");
 		}
+
+		if(PauseButton)
+		{
+			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Triggered, this, &APlayerCharacter::PauseGame);
+			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
+		}
 	}
 }
 
@@ -118,6 +123,11 @@ void APlayerCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+}
+
+void APlayerCharacter::PauseGame()
+{
+	GameMode->PauseGame(!UGameplayStatics::IsGamePaused(GetWorld()));	
 }
 
 void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)

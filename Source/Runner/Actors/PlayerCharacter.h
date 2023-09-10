@@ -54,11 +54,17 @@ protected:
 		void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void PauseGame();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* PauseButton;
 
 	void RotateRightLeft(const FInputActionValue& Value);
 
@@ -74,6 +80,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	int32 Score = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ARunnerGameMode* GameMode;
 
 public:	
 	// Called every frame

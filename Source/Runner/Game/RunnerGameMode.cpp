@@ -2,6 +2,9 @@
 
 
 #include "RunnerGameMode.h"
+
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "Logging/StructuredLog.h"
 
 
@@ -28,4 +31,13 @@ void ARunnerGameMode::TimerFunction()
 void ARunnerGameMode::LevelComplete()
 {
 	UE_LOG(LogTemp, Log, TEXT("Level Complete"));
+}
+
+void ARunnerGameMode::PauseGame(bool PauseGame)
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), PauseGame);
+	//if(PlayerWidget)
+	//{
+	//	PlayerWidget->GamePaused();
+	//}
 }
