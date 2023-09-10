@@ -22,12 +22,15 @@ protected:
 	
 	FTimerHandle TimerHandle;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Widgets)
-	//UPlayerHUD* PlayerWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Widgets)
+	TSubclassOf<UUserWidget> DefaultLevelCompleteWidget;
+
+	UPROPERTY()
+	UUserWidget* LevelCompleteWidget;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	int32 levelTimer = 5;
+	int32 LevelTimer = 5;
 	void LevelComplete();
 	void PauseGame(bool PauseGame);
 };

@@ -15,10 +15,10 @@ void ARunnerGameMode::BeginPlay()
 
 void ARunnerGameMode::TimerFunction()
 {
-	if (levelTimer > 0)
+	if (LevelTimer > 0)
 	{
-		levelTimer--;
-		UE_LOG(LogTemp, Log, TEXT("%d"), levelTimer);
+		LevelTimer--;
+		UE_LOG(LogTemp, Log, TEXT("%d"), LevelTimer);
 	}
 	else
 	{
@@ -31,6 +31,14 @@ void ARunnerGameMode::TimerFunction()
 void ARunnerGameMode::LevelComplete()
 {
 	UE_LOG(LogTemp, Log, TEXT("Level Complete"));
+	if(DefaultLevelCompleteWidget)
+	{
+		LevelCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultLevelCompleteWidget);
+		if(LevelCompleteWidget)
+		{
+			LevelCompleteWidget->AddToViewport();
+		}
+	}
 }
 
 void ARunnerGameMode::PauseGame(bool PauseGame)
