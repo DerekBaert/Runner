@@ -20,9 +20,11 @@ class ARunnerGameMode;
 	Construct maze
 	Test player drifting 
 	Particles for player drifting
-	Add remaining time to score
-	Pause and End screens
-	Particles for pickups?
+	Minimap
+	Menus navigable by controller
+	Save player scores + Leaderboard
+	Volume control?
+	Particles for pickups
  *
  */
 
