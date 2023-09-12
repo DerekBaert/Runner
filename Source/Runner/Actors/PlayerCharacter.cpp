@@ -77,6 +77,8 @@ void APlayerCharacter::BeginPlay()
 	{
 		Cast<APointPickup>(Points[i])->PickedUp.AddDynamic(this, &APlayerCharacter::AddPoints);
 	}
+
+	ForwardDirection = Mesh->GetForwardVector();
 }
 
 // Called to bind functionality to input
@@ -133,18 +135,18 @@ void APlayerCharacter::PauseGame()
 void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 {
 	// Reduce speed 
-	Speed = TurnSpeed;
+	Speed *= 0.9f;
 
 	// Rotate character to face new direction
 	const float MovementAxis = Value.Get<float>();
 	Mesh->AddLocalRotation(FRotator(0, MovementAxis, 0));
-
-
+	Mesh->AddForce(ForwardDirection * NormalSpeed, NAME_None, true);
 }
 
 void APlayerCharacter::TurnInputFinished()
 {
 	Speed = NormalSpeed;
+	ForwardDirection = Mesh->GetForwardVector();
 }
 
 // Called every frame
@@ -152,7 +154,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	const FVector Force = Mesh->GetForwardVector() * Speed;
+	const FVector Force = ForwardDirection * Speed;
 	Mesh->AddForce(Force, NAME_None, true);
 }
 

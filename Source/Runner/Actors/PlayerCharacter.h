@@ -69,7 +69,7 @@ protected:
 
 	void RotateRightLeft(const FInputActionValue& Value);
 
-	void InputFinished();
+	void TurnInputFinished();
 
 	void IncrementKeyCount();
 
@@ -84,6 +84,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ARunnerGameMode* GameMode;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FVector ForwardDirection;
 
 public:	
 	// Called every frame
