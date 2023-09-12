@@ -88,7 +88,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		if (MoveAction) 
 		{
 			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::RotateRightLeft);
-			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &APlayerCharacter::TurnInputFinished);
 		}
 		else 
 		{
@@ -98,7 +98,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		if(PauseButton)
 		{
 			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Triggered, this, &APlayerCharacter::PauseGame);
-			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
+			//EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
 		}
 	}
 }
@@ -139,9 +139,10 @@ void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 	const float MovementAxis = Value.Get<float>();
 	Mesh->AddLocalRotation(FRotator(0, MovementAxis, 0));
 
+
 }
 
-void APlayerCharacter::InputFinished()
+void APlayerCharacter::TurnInputFinished()
 {
 	Speed = NormalSpeed;
 }
@@ -153,6 +154,5 @@ void APlayerCharacter::Tick(float DeltaTime)
 	
 	const FVector Force = Mesh->GetForwardVector() * Speed;
 	Mesh->AddForce(Force, NAME_None, true);
-	
 }
 
