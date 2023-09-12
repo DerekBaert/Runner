@@ -28,6 +28,7 @@ class ARunnerGameMode;
  *
  */
 
+class UNiagaraComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKeyCountUpdated, int32, KeyCount);
 
@@ -66,6 +67,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PauseButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UNiagaraComponent* Niagara;
 
 	void RotateRightLeft(const FInputActionValue& Value);
 

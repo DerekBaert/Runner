@@ -11,6 +11,7 @@
 #include "Logging/StructuredLog.h"
 #include "Components/ArrowComponent.h"
 #include "KeyPickup.h"
+#include "NiagaraComponent.h"
 #include "PointPickup.h"
 
 using UEILPS = UEnhancedInputLocalPlayerSubsystem;
@@ -24,7 +25,6 @@ APlayerCharacter::APlayerCharacter()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetSimulatePhysics(true);
-	RootComponent = Mesh;
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->SetupAttachment(Mesh);
@@ -35,6 +35,11 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	Niagara->SetupAttachment(Mesh);
+	Niagara->SetAutoActivate(false);
+
+	RootComponent = Mesh;
 	
 }
 
@@ -79,6 +84,7 @@ void APlayerCharacter::BeginPlay()
 	}
 
 	ForwardDirection = Mesh->GetForwardVector();
+	
 }
 
 // Called to bind functionality to input
@@ -141,12 +147,14 @@ void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 	const float MovementAxis = Value.Get<float>();
 	Mesh->AddLocalRotation(FRotator(0, MovementAxis, 0));
 	Mesh->AddForce(ForwardDirection * NormalSpeed, NAME_None, true);
+	Niagara->Activate();
 }
 
 void APlayerCharacter::TurnInputFinished()
 {
 	Speed = NormalSpeed;
 	ForwardDirection = Mesh->GetForwardVector();
+	Niagara->Deactivate();
 }
 
 // Called every frame
