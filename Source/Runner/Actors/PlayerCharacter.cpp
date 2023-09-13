@@ -145,7 +145,7 @@ void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 
 	// Rotate character to face new direction
 	const float MovementAxis = Value.Get<float>();
-	Mesh->AddLocalRotation(FRotator(0, MovementAxis, 0));
+	Mesh->AddLocalRotation(FRotator(0, MovementAxis / 2, 0));
 	Mesh->AddForce(ForwardDirection * NormalSpeed, NAME_None, true);
 	Niagara->Activate();
 }

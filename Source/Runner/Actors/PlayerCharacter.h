@@ -19,7 +19,6 @@ class ARunnerGameMode;
  * To do:
 	Construct maze
 	Test player drifting 
-	Particles for player drifting
 	Minimap
 	Menus navigable by controller
 	Save player scores + Leaderboard

@@ -3,6 +3,7 @@
 
 #include "PointPickup.h"
 #include "Logging/StructuredLog.h"
+#include "NiagaraComponent.h"
 #include "PlayerCharacter.h"
 
 
@@ -13,6 +14,8 @@ APointPickup::APointPickup()
 
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Niagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara"));
+	Niagara->SetupAttachment(Mesh);
 	RootComponent = Mesh;
 }
 
@@ -25,6 +28,17 @@ void APointPickup::BeginPlay()
 	{
 		Mesh->OnComponentBeginOverlap.AddDynamic(this, &APointPickup::OnBeginOverlap);
 	}
+}
+
+void APointPickup::OnConstruction(const FTransform& Transform)
+{
+	if (Niagara)
+	{
+		Niagara->SetColorParameter(TEXT("Color"), PickupColor);
+	}
+
+	DynamicMaterial = Mesh->CreateAndSetMaterialInstanceDynamic(0);
+	DynamicMaterial->SetVectorParameterValue(TEXT("Color"), PickupColor);
 }
 
 void APointPickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
