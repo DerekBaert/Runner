@@ -3,6 +3,7 @@
 
 #include "Door.h"
 
+#include "KeyPickup.h"
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -26,6 +27,10 @@ void ADoor::BeginPlay()
 
 	// This is throwing errors
 	Cast<APlayerCharacter>(Player)->KeyCountUpdated.AddDynamic(this, &ADoor::OpenDoor);
+
+	TArray<AActor*> Keys;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AKeyPickup::StaticClass(), Keys);
+	KeysNeeded = Keys.Num();
 
 }
 

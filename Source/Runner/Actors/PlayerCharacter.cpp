@@ -82,8 +82,6 @@ void APlayerCharacter::BeginPlay()
 	{
 		Cast<APointPickup>(Points[i])->PickedUp.AddDynamic(this, &APlayerCharacter::AddPoints);
 	}
-
-	ForwardDirection = Mesh->GetForwardVector();
 	
 }
 
@@ -108,6 +106,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Triggered, this, &APlayerCharacter::PauseGame);
 			//EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
 		}
+
+		if(AccelerateButton)
+		{
+			EnhancedInputComponent->BindAction(AccelerateButton, ETriggerEvent::Triggered, this, &APlayerCharacter::Accelerate);
+		}
+
+		if(ReverseButton)
+		{
+			EnhancedInputComponent->BindAction(ReverseButton, ETriggerEvent::Triggered, this, &APlayerCharacter::Reverse);
+		}
+
 	}
 }
 
@@ -117,6 +126,34 @@ void APlayerCharacter::IncrementKeyCount()
 	KeyCount++;
 	UE_LOG(LogTemp, Log, TEXT("KeyCount: %d"), KeyCount);
 	KeyCountUpdated.Broadcast(KeyCount);
+}
+
+void APlayerCharacter::Accelerate(const FInputActionValue& Value)
+{
+	if(Value.Get<bool>())
+	{
+		const FVector Force = Mesh->GetForwardVector() * Speed;
+		Mesh->AddForce(Force, NAME_None, true);
+	}
+}
+
+void APlayerCharacter::Reverse(const FInputActionValue& Value)
+{
+	if (Value.Get<bool>())
+	{
+		const FVector Force = Mesh->GetForwardVector() * (-Speed / 2);
+		Mesh->AddForce(Force, NAME_None, true);
+	}
+}
+
+void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
+{
+	// Rotate character to face new direction
+	const float MovementAxis = Value.Get<float>();
+	Mesh->SetLinearDamping(1.0f);
+
+	Mesh->AddTorqueInDegrees(FVector(0, 0, TurnSpeed * MovementAxis), NAME_None, true);
+	Niagara->Activate();
 }
 
 // Adds points from broadcasting point pickup
@@ -138,22 +175,9 @@ void APlayerCharacter::PauseGame()
 	GameMode->PauseGame(!UGameplayStatics::IsGamePaused(GetWorld()));	
 }
 
-void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
-{
-	// Reduce speed 
-	Speed *= 0.9f;
-
-	// Rotate character to face new direction
-	const float MovementAxis = Value.Get<float>();
-	Mesh->AddLocalRotation(FRotator(0, MovementAxis / 2, 0));
-	Mesh->AddForce(ForwardDirection * NormalSpeed, NAME_None, true);
-	Niagara->Activate();
-}
-
 void APlayerCharacter::TurnInputFinished()
 {
-	Speed = NormalSpeed;
-	ForwardDirection = Mesh->GetForwardVector();
+	Mesh->SetLinearDamping(0.01f);
 	Niagara->Deactivate();
 }
 
@@ -162,7 +186,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	const FVector Force = ForwardDirection * Speed;
-	Mesh->AddForce(Force, NAME_None, true);
+	/*const FVector Force = Mesh->GetForwardVector() * Speed;
+	Mesh->AddForce(Force, NAME_None, true);*/
 }
 

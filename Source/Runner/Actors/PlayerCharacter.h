@@ -17,13 +17,9 @@ class ARunnerGameMode;
 
 /*
  * To do:
-	Construct maze
-	Test player drifting 
-	Minimap
 	Menus navigable by controller
 	Save player scores + Leaderboard
 	Volume control?
-	Particles for pickups
  *
  */
 
@@ -67,6 +63,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* PauseButton;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* AccelerateButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* ReverseButton;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UNiagaraComponent* Niagara;
 
@@ -75,6 +77,10 @@ protected:
 	void TurnInputFinished();
 
 	void IncrementKeyCount();
+
+	void Accelerate(const FInputActionValue& Value);
+
+	void Reverse(const FInputActionValue& Value);
 
 	UFUNCTION()
 	void AddPoints(int32 scoreDelta);
@@ -87,8 +93,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ARunnerGameMode* GameMode;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FVector ForwardDirection;
 
 public:	
 	// Called every frame
@@ -107,10 +111,13 @@ public:
 	float Speed = 1000.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float NormalSpeed = 1000.0f;
+	float TurnSpeed = 250.00;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float TurnSpeed = 500.0f;
+	float DefaultDamping = 0.01f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float TurnDamping = 1.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	USpringArmComponent* SpringArm;

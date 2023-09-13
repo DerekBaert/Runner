@@ -30,7 +30,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	int32 LevelTimer = 5;
+	int32 LevelTimer = 300;
 	void LevelComplete();
 	void PauseGame(bool PauseGame);
 };
