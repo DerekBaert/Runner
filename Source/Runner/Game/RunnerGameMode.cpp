@@ -44,8 +44,4 @@ void ARunnerGameMode::LevelComplete()
 void ARunnerGameMode::PauseGame(bool PauseGame)
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), PauseGame);
-	//if(PlayerWidget)
-	//{
-	//	PlayerWidget->GamePaused();
-	//}
 }

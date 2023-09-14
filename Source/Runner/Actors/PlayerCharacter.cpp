@@ -141,7 +141,7 @@ void APlayerCharacter::Reverse(const FInputActionValue& Value)
 {
 	if (Value.Get<bool>())
 	{
-		const FVector Force = Mesh->GetForwardVector() * (-Speed / 2);
+		const FVector Force = Mesh->GetForwardVector() * (-Speed);
 		Mesh->AddForce(Force, NAME_None, true);
 	}
 }
@@ -172,7 +172,16 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 void APlayerCharacter::PauseGame()
 {
-	GameMode->PauseGame(!UGameplayStatics::IsGamePaused(GetWorld()));	
+	if(UGameplayStatics::IsGamePaused(GetWorld()))
+	{
+		GameMode->PauseGame(false);
+		Cast<APlayerController>(GetController())->bShowMouseCursor = false;
+	}	
+	else
+	{
+		GameMode->PauseGame(true);
+		Cast<APlayerController>(GetController())->bShowMouseCursor = true;
+	}
 }
 
 void APlayerCharacter::TurnInputFinished()
