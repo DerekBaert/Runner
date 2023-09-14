@@ -141,8 +141,8 @@ void APlayerCharacter::Reverse(const FInputActionValue& Value)
 {
 	if (Value.Get<bool>())
 	{
-		const FVector Force = Mesh->GetForwardVector() * (-Speed);
-		Mesh->AddForce(Force, NAME_None, true);
+		const FVector Force = Mesh->GetForwardVector() * (Speed * 0.75);
+		Mesh->AddForce(Force * -1, NAME_None, true);
 	}
 }
 
@@ -151,6 +151,14 @@ void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 	// Rotate character to face new direction
 	const float MovementAxis = Value.Get<float>();
 	Mesh->SetLinearDamping(1.0f);
+	
+
+	if(Mesh->GetComponentVelocity().Length() < 100)
+	{
+		const FVector Force = Mesh->GetForwardVector() * (Speed * 0.75);
+		Mesh->AddForce(Force, NAME_None, true);
+		UE_LOG(LogTemp, Log, TEXT("Movement in turn function"));
+	}	
 
 	Mesh->AddTorqueInDegrees(FVector(0, 0, TurnSpeed * MovementAxis), NAME_None, true);
 	Niagara->Activate();
