@@ -5,12 +5,16 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "Logging/StructuredLog.h"
 
 
 void ARunnerGameMode::BeginPlay()
 {
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARunnerGameMode::TimerFunction, 1.0f, true);
+	const FInputModeGameAndUI InputMode;
+	Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
 }
 
 void ARunnerGameMode::TimerFunction()
@@ -26,6 +30,8 @@ void ARunnerGameMode::TimerFunction()
 		UE_LOG(LogTemp, Log, TEXT("Timer finished"));
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
+	
+	
 }
 
 void ARunnerGameMode::LevelComplete()
