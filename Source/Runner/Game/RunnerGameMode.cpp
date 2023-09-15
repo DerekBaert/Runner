@@ -13,8 +13,7 @@
 void ARunnerGameMode::BeginPlay()
 {
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARunnerGameMode::TimerFunction, 1.0f, true);
-	const FInputModeGameAndUI InputMode;
-	Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
+
 }
 
 void ARunnerGameMode::TimerFunction()
@@ -30,8 +29,6 @@ void ARunnerGameMode::TimerFunction()
 		UE_LOG(LogTemp, Log, TEXT("Timer finished"));
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
-	
-	
 }
 
 void ARunnerGameMode::LevelComplete()
@@ -42,6 +39,8 @@ void ARunnerGameMode::LevelComplete()
 		LevelCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultLevelCompleteWidget);
 		if(LevelCompleteWidget)
 		{
+			const FInputModeGameAndUI InputMode;
+			Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
 			LevelCompleteWidget->AddToViewport();
 		}
 	}
@@ -49,5 +48,16 @@ void ARunnerGameMode::LevelComplete()
 
 void ARunnerGameMode::PauseGame(bool PauseGame)
 {
+	if(PauseGame)
+	{
+		const FInputModeGameAndUI InputMode;
+		Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
+	}
+	else
+	{
+		const FInputModeGameOnly InputMode;
+		Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
+	}
+	
 	UGameplayStatics::SetGamePaused(GetWorld(), PauseGame);
 }

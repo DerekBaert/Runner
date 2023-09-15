@@ -103,7 +103,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if(PauseButton)
 		{
-			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Triggered, this, &APlayerCharacter::PauseGame);
+			EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Completed, this, &APlayerCharacter::PauseGame);
 			//EnhancedInputComponent->BindAction(PauseButton, ETriggerEvent::Completed, this, &APlayerCharacter::InputFinished);
 		}
 

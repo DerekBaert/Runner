@@ -17,8 +17,10 @@ class ARunnerGameMode;
 
 /*
  * To do:
-	Menus navigable by controller
+	Menus navigable by controller (Done?)
+	
 	Save player scores + Leaderboard
+	
 	Volume control?
  *
  */
