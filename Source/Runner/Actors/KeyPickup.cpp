@@ -11,8 +11,8 @@ AKeyPickup::AKeyPickup()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	RootComponent = Mesh;
-
+	RotatingMovement = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingMovement"));
+	Mesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -22,6 +22,11 @@ void AKeyPickup::BeginPlay()
 	if(Mesh)
 	{
 		Mesh->OnComponentBeginOverlap.AddDynamic(this, &AKeyPickup::OnBeginOverlap);
+	}
+
+	if(RotatingMovement)
+	{
+		RotatingMovement->RotationRate = FRotator(180, 0, 0);
 	}
 }
 

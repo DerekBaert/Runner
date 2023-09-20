@@ -2,6 +2,8 @@
 
 
 #include "PlayerCharacter.h"
+
+#include "Endpoint.h"
 #include "../Game/RunnerGameMode.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -82,6 +84,10 @@ void APlayerCharacter::BeginPlay()
 	{
 		Cast<APointPickup>(Points[i])->PickedUp.AddDynamic(this, &APlayerCharacter::AddPoints);
 	}
+
+	TArray<AActor*> Endpoint;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEndpoint::StaticClass(), Endpoint);
+	Cast<AEndpoint>(Endpoint[0])->OnComplete.AddUObject(this, &APlayerCharacter::LevelComplete);
 	
 }
 
@@ -130,7 +136,7 @@ void APlayerCharacter::IncrementKeyCount()
 
 void APlayerCharacter::Accelerate(const FInputActionValue& Value)
 {
-	if(Value.Get<bool>())
+	if(Value.Get<bool>() && !bIsLevelCompleted)
 	{
 		const FVector Force = Mesh->GetForwardVector() * Speed;
 		Mesh->AddForce(Force, NAME_None, true);
@@ -139,7 +145,7 @@ void APlayerCharacter::Accelerate(const FInputActionValue& Value)
 
 void APlayerCharacter::Reverse(const FInputActionValue& Value)
 {
-	if (Value.Get<bool>())
+	if (Value.Get<bool>() && !bIsLevelCompleted)
 	{
 		const FVector Force = Mesh->GetForwardVector() * (Speed * 0.75);
 		Mesh->AddForce(Force * -1, NAME_None, true);
@@ -148,20 +154,24 @@ void APlayerCharacter::Reverse(const FInputActionValue& Value)
 
 void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 {
-	// Rotate character to face new direction
-	const float MovementAxis = Value.Get<float>();
-	Mesh->SetLinearDamping(1.0f);
-	
-
-	if(Mesh->GetComponentVelocity().Length() < 100)
+	if(!bIsLevelCompleted)
 	{
-		const FVector Force = Mesh->GetForwardVector() * (Speed * 0.75);
-		Mesh->AddForce(Force, NAME_None, true);
-		UE_LOG(LogTemp, Log, TEXT("Movement in turn function"));
-	}	
+		// Rotate character to face new direction
+		const float MovementAxis = Value.Get<float>();
+		Mesh->SetLinearDamping(1.0f);
+		
 
-	Mesh->AddTorqueInDegrees(FVector(0, 0, TurnSpeed * MovementAxis), NAME_None, true);
-	Niagara->Activate();
+		if(Mesh->GetComponentVelocity().Length() < 100)
+		{
+			const FVector Force = Mesh->GetForwardVector() * (Speed * 0.75);
+			Mesh->AddForce(Force, NAME_None, true);
+			//UE_LOG(LogTemp, Log, TEXT("Movement in turn function"));
+		}	
+
+		Mesh->AddTorqueInDegrees(FVector(0, 0, TurnSpeed * MovementAxis), NAME_None, true);
+		Niagara->Activate();
+	}
+	
 }
 
 // Adds points from broadcasting point pickup
@@ -180,16 +190,25 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 void APlayerCharacter::PauseGame()
 {
-	if(UGameplayStatics::IsGamePaused(GetWorld()))
+	if(!bIsLevelCompleted)
 	{
-		GameMode->PauseGame(false);
-		Cast<APlayerController>(GetController())->bShowMouseCursor = false;
-	}	
-	else
-	{
-		GameMode->PauseGame(true);
-		Cast<APlayerController>(GetController())->bShowMouseCursor = true;
+		if(UGameplayStatics::IsGamePaused(GetWorld()))
+		{
+			GameMode->PauseGame(false);
+			Cast<APlayerController>(GetController())->bShowMouseCursor = false;
+		}	
+		else
+		{
+			GameMode->PauseGame(true);
+			Cast<APlayerController>(GetController())->bShowMouseCursor = true;
+		}
 	}
+	
+}
+
+void APlayerCharacter::LevelComplete()
+{
+	bIsLevelCompleted = true;
 }
 
 void APlayerCharacter::TurnInputFinished()

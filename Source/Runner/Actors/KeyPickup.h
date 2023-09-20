@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/RotatingMovementComponent.h"
 #include "KeyPickup.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnPickUpSignature);
@@ -26,8 +27,11 @@ protected:
 	UFUNCTION() 
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Setup)
 	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Setup)
+	URotatingMovementComponent* RotatingMovement;
 
 public:	
 	// Called every frame

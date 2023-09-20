@@ -8,12 +8,18 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/Character.h"
 #include "Logging/StructuredLog.h"
+#include "Runner/Actors/Endpoint.h"
+#include "Runner/Actors/PlayerCharacter.h"
 
 
 void ARunnerGameMode::BeginPlay()
 {
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ARunnerGameMode::TimerFunction, 1.0f, true);
+	PlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
+	TArray<AActor*> Endpoint;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEndpoint::StaticClass(), Endpoint);
+	Cast<AEndpoint>(Endpoint[0])->OnComplete.AddUObject(this, &ARunnerGameMode::LevelComplete);
 }
 
 void ARunnerGameMode::TimerFunction()
@@ -44,6 +50,7 @@ void ARunnerGameMode::LevelComplete()
 			LevelCompleteWidget->AddToViewport();
 		}
 	}
+
 }
 
 void ARunnerGameMode::PauseGame(bool PauseGame)

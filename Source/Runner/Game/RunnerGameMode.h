@@ -28,6 +28,9 @@ protected:
 	UPROPERTY()
 	UUserWidget* LevelCompleteWidget;
 
+	UPROPERTY()
+	APlayerController* PlayerController;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	int32 LevelTimer = 300;

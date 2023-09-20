@@ -9,6 +9,8 @@
 
 class UBoxComponent;
 
+DECLARE_MULTICAST_DELEGATE(FOnCompleteSignature);
+
 UCLASS()
 class RUNNER_API AEndpoint : public AActor
 {
@@ -17,6 +19,8 @@ class RUNNER_API AEndpoint : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AEndpoint();
+
+	FOnCompleteSignature OnComplete;
 
 protected:
 	// Called when the game starts or when spawned

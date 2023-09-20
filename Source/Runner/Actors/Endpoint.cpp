@@ -37,7 +37,7 @@ void AEndpoint::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	if(OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Endpoint Triggered"));
-		GameMode->LevelComplete();
+		OnComplete.Broadcast();
 	}
 }
 

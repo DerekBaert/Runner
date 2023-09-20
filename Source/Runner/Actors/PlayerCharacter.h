@@ -20,8 +20,6 @@ class ARunnerGameMode;
 	Menus navigable by controller (Done?)
 	
 	Save player scores + Leaderboard
-	
-	Volume control?
  *
  */
 
@@ -56,6 +54,9 @@ protected:
 	UFUNCTION()
 	void PauseGame();
 
+	UFUNCTION()
+	void LevelComplete();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* InputMappingContext;
 
@@ -83,6 +84,8 @@ protected:
 	void Accelerate(const FInputActionValue& Value);
 
 	void Reverse(const FInputActionValue& Value);
+
+	bool bIsLevelCompleted = false;
 
 	UFUNCTION()
 	void AddPoints(int32 scoreDelta);
