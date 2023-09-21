@@ -136,7 +136,7 @@ void APlayerCharacter::IncrementKeyCount()
 
 void APlayerCharacter::Accelerate(const FInputActionValue& Value)
 {
-	if(Value.Get<bool>() && !bIsLevelCompleted)
+	if(Value.Get<bool>() && !bIsLevelCompleted && !bIsGameOver)
 	{
 		const FVector Force = Mesh->GetForwardVector() * Speed;
 		Mesh->AddForce(Force, NAME_None, true);
@@ -145,7 +145,7 @@ void APlayerCharacter::Accelerate(const FInputActionValue& Value)
 
 void APlayerCharacter::Reverse(const FInputActionValue& Value)
 {
-	if (Value.Get<bool>() && !bIsLevelCompleted)
+	if (Value.Get<bool>() && !bIsLevelCompleted && !bIsGameOver)
 	{
 		const FVector Force = Mesh->GetForwardVector() * (Speed * 0.75);
 		Mesh->AddForce(Force * -1, NAME_None, true);
@@ -154,7 +154,7 @@ void APlayerCharacter::Reverse(const FInputActionValue& Value)
 
 void APlayerCharacter::RotateRightLeft(const FInputActionValue& Value)
 {
-	if(!bIsLevelCompleted)
+	if(!bIsLevelCompleted && !bIsGameOver)
 	{
 		// Rotate character to face new direction
 		const float MovementAxis = Value.Get<float>();
@@ -209,6 +209,11 @@ void APlayerCharacter::PauseGame()
 void APlayerCharacter::LevelComplete()
 {
 	bIsLevelCompleted = true;
+}
+
+void APlayerCharacter::GameOver()
+{
+	bIsGameOver = true;
 }
 
 void APlayerCharacter::TurnInputFinished()

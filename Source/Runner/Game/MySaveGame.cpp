@@ -3,3 +3,8 @@
 
 #include "MySaveGame.h"
 
+void UMySaveGame::AddScore(int32 NewScore)
+{
+	PlayerScores.Add(NewScore);
+	PlayerScores.Sort();
+}

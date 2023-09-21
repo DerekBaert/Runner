@@ -13,5 +13,12 @@ UCLASS()
 class RUNNER_API UMySaveGame : public USaveGame
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Basic)
+	TArray<int32> PlayerScores;
+
+	void AddScore(int32 NewScore);
+
 	
 };

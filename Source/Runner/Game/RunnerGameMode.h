@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MySaveGame.h"
 #include "GameFramework/GameModeBase.h"
+#include "../Actors/PlayerCharacter.h"
+#include "GameFramework/SaveGame.h"
 #include "RunnerGameMode.generated.h"
 
 
@@ -25,15 +28,29 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Widgets)
 	TSubclassOf<UUserWidget> DefaultLevelCompleteWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Widgets)
+	TSubclassOf<UUserWidget> DefaultGameOverWidget;
+
 	UPROPERTY()
 	UUserWidget* LevelCompleteWidget;
 
 	UPROPERTY()
+	UUserWidget* GameOverWidget;;
+
+	UPROPERTY()
 	APlayerController* PlayerController;
+
+	UPROPERTY()
+	APlayerCharacter* Player;
+
+	
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	int32 LevelTimer = 300;
 	void LevelComplete();
 	void PauseGame(bool PauseGame);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Default)
+	UMySaveGame* SaveGame;
 };

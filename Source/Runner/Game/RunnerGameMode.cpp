@@ -3,6 +3,7 @@
 
 #include "RunnerGameMode.h"
 
+#include "MySaveGame.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
@@ -20,6 +21,30 @@ void ARunnerGameMode::BeginPlay()
 	TArray<AActor*> Endpoint;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEndpoint::StaticClass(), Endpoint);
 	Cast<AEndpoint>(Endpoint[0])->OnComplete.AddUObject(this, &ARunnerGameMode::LevelComplete);
+
+	Player = Cast<APlayerCharacter>(PlayerController->GetPawn());
+
+	if (SaveGame = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot("DefaultSlot", 0)))
+	{
+		if(SaveGame)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Scores Loaded"));
+		}
+	}
+	else
+	{
+		SaveGame = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+		if(SaveGame)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Save slot created"));
+		}
+	}
+
+	for(int32 score : SaveGame->PlayerScores)
+	{
+		UE_LOGFMT(LogTemp, Log, "Score: '{0}'", score);
+	}
+
 }
 
 void ARunnerGameMode::TimerFunction()
@@ -27,27 +52,41 @@ void ARunnerGameMode::TimerFunction()
 	if (LevelTimer > 0)
 	{
 		LevelTimer--;
-		UE_LOG(LogTemp, Log, TEXT("%d"), LevelTimer);
+		//UE_LOG(LogTemp, Log, TEXT("%d"), LevelTimer);
 	}
 	else
 	{
 		// Add game over later
-		UE_LOG(LogTemp, Log, TEXT("Timer finished"));
+		//UE_LOG(LogTemp, Log, TEXT("Timer finished"));
+		Player->GameOver();
+		GameOverWidget->AddToViewport();
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
 }
 
 void ARunnerGameMode::LevelComplete()
 {
+
 	UE_LOG(LogTemp, Log, TEXT("Level Complete"));
 	if(DefaultLevelCompleteWidget)
 	{
 		LevelCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultLevelCompleteWidget);
+		GameOverWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameOverWidget);
+
 		if(LevelCompleteWidget)
 		{
 			const FInputModeGameAndUI InputMode;
-			Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
+			PlayerController->SetInputMode(InputMode);
+
+			SaveGame->AddScore(Player->Score + LevelTimer);
+
+			if (UGameplayStatics::SaveGameToSlot(SaveGame, "DefaultSlot", 0))
+			{
+				UE_LOG(LogTemp, Log, TEXT("Score Saved"));
+			}
+
 			LevelCompleteWidget->AddToViewport();
+			GetWorldTimerManager().ClearTimer(TimerHandle);
 		}
 	}
 
@@ -58,12 +97,12 @@ void ARunnerGameMode::PauseGame(bool PauseGame)
 	if(PauseGame)
 	{
 		const FInputModeGameAndUI InputMode;
-		Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
+		PlayerController->SetInputMode(InputMode);
 	}
 	else
 	{
 		const FInputModeGameOnly InputMode;
-		Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetInputMode(InputMode);
+		PlayerController->SetInputMode(InputMode);
 	}
 	
 	UGameplayStatics::SetGamePaused(GetWorld(), PauseGame);

@@ -39,6 +39,11 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FKeyCountUpdated KeyCountUpdated;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	int32 Score = 0;
+
+	UFUNCTION()
+	void GameOver();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -56,6 +61,8 @@ protected:
 
 	UFUNCTION()
 	void LevelComplete();
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* InputMappingContext;
@@ -87,19 +94,17 @@ protected:
 
 	bool bIsLevelCompleted = false;
 
+	bool bIsGameOver = false;
+
 	UFUNCTION()
 	void AddPoints(int32 scoreDelta);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	int32 KeyCount = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
-	int32 Score = 0;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ARunnerGameMode* GameMode;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -129,4 +134,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Setup)
 	UCameraComponent* Camera;
+
+
 };
