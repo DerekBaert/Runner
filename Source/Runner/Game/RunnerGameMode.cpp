@@ -44,7 +44,7 @@ void ARunnerGameMode::BeginPlay()
 	{
 		UE_LOGFMT(LogTemp, Log, "Score: '{0}'", score);
 	}
-
+	GameOverWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameOverWidget);
 }
 
 void ARunnerGameMode::TimerFunction()
@@ -71,8 +71,7 @@ void ARunnerGameMode::LevelComplete()
 	if(DefaultLevelCompleteWidget)
 	{
 		LevelCompleteWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultLevelCompleteWidget);
-		GameOverWidget = CreateWidget<UUserWidget>(GetWorld(), DefaultGameOverWidget);
-
+		
 		if(LevelCompleteWidget)
 		{
 			const FInputModeGameAndUI InputMode;
